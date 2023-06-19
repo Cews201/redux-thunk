@@ -1,34 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+    const dispatch= useDispatch();
+    const {token, ejecutando, error} = useSelector((state) => state);
+    const {tokenLimpio, setTokenLimpio}=useState(false);
+
+    useEffect(() =>{
+      dispatch( fetchToken(123456, 'ejemplo@ejemplo.com'));
+
+    },[dispatch])
+
+    const limpiarToken= () =>{
+      dispatch({type: 'limpiarToken'});
+      setTokenLimpio(true);
+    }
+    const obtenerToken= () =>{
+      dispatch({type: 'obtenerToken'});
+      setTokenLimpio(true);
+    }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+
+        <div>
+          <h1>cargando info</h1>
+          {ejecutando ? <p>Cargando...</p> : null}
+          {token ? <p>Token: {token}</p> : null}
+          {error ? <p>Error: {error} </p> : null}
+          {token ? <button onClick={limpiarToken}>Limpiar token</button>: null}
+          {token ? <button onClick={obtenerToken}>Obtener Token</button>: null}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+     
+    
   )
 }
 
